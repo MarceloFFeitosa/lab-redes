@@ -1,0 +1,352 @@
+node n1 {
+    type router
+    model PC
+    network-config {
+	hostname usuario
+	!
+	interface eth0
+	 ip address 192.0.2.20/24
+	 ipv6 address 2001:db8:0::20/64
+	!
+    }
+    canvas c1
+    iconcoords {132.0 222.0}
+    labelcoords {132.0 254.0}
+    interface-peer {eth0 n3}
+    custom-config {
+	custom-config-id service:UserDefined
+	custom-command UserDefined
+	config {
+	files=('usuario.sh', )
+	cmdup=('bash usuario.sh', )
+	meta=Cliente
+	}
+    }
+    custom-config {
+	custom-config-id service:UserDefined:usuario.sh
+	custom-command usuario.sh
+	config {
+	#!/bin/bash
+	
+	# Loop para criar usuários
+	while true; do
+	    read -p "Digite o nome do usuário a ser criado: " username
+	
+	    read -s -p "Digite a senha para o usuário $username: " password
+	    echo
+	    # Cria o usuário
+	    useradd -m -s /bin/bash "$username"
+	    
+	    echo "$username:$password" | chpasswd
+	
+	    echo "Usuário $username criado com sucesso."
+	done
+	
+	}
+    }
+    services {DefaultRoute UserDefined}
+}
+
+node n2 {
+    type router
+    model host
+    network-config {
+	hostname servidor
+	!
+	interface eth0
+	 ip address 192.0.3.10/24
+	 ipv6 address 2001:db8:1::10/64
+	!
+    }
+    canvas c1
+    iconcoords {158.0 378.0}
+    labelcoords {158.0 410.0}
+    interface-peer {eth0 n3}
+}
+
+node n3 {
+    type router
+    model router
+    network-config {
+	hostname roteador
+	!
+	interface eth2
+	 ip address 192.0.4.1/24
+	 ipv6 address 2001:db8:2::1/64
+	!
+	interface eth1
+	 ip address 192.0.3.1/24
+	 ipv6 address 2001:db8:1::1/64
+	!
+	interface eth0
+	 ip address 192.0.2.1/24
+	 ipv6 address 2001:db8:0::1/64
+	!
+    }
+    canvas c1
+    iconcoords {235.0 273.0}
+    labelcoords {262.0 301.0}
+    interface-peer {eth0 n1}
+    interface-peer {eth1 n2}
+    interface-peer {eth2 n4}
+}
+
+node n4 {
+    type router
+    model router
+    network-config {
+	hostname n4
+	!
+	interface eth4
+	 ip address 192.0.8.1/24
+	 ipv6 address 2001:db8:6::1/64
+	!
+	interface eth3
+	 ip address 192.0.7.1/24
+	 ipv6 address 2001:db8:5::1/64
+	!
+	interface eth2
+	 ip address 192.0.6.1/24
+	 ipv6 address 2001:db8:4::1/64
+	!
+	interface eth1
+	 ip address 192.0.5.1/24
+	 ipv6 address 2001:db8:3::1/64
+	!
+	interface eth0
+	 ip address 192.0.4.2/24
+	 ipv6 address 2001:db8:2::2/64
+	!
+    }
+    canvas c1
+    iconcoords {504.0 264.0}
+    labelcoords {504.0 296.0}
+    interface-peer {eth0 n3}
+    interface-peer {eth1 n8}
+    interface-peer {eth2 n9}
+    interface-peer {eth3 n10}
+    interface-peer {eth4 n5}
+}
+
+node n5 {
+    type router
+    model router
+    network-config {
+	hostname n5
+	!
+	interface eth2
+	 ip address 192.0.10.1/24
+	 ipv6 address 2001:db8:8::1/64
+	!
+	interface eth1
+	 ip address 192.0.9.1/24
+	 ipv6 address 2001:db8:7::1/64
+	!
+	interface eth0
+	 ip address 192.0.8.2/24
+	 ipv6 address 2001:db8:6::2/64
+	!
+    }
+    canvas c1
+    iconcoords {784.0 412.0}
+    labelcoords {784.0 444.0}
+    interface-peer {eth0 n4}
+    interface-peer {eth1 n7}
+    interface-peer {eth2 n6}
+}
+
+node n6 {
+    type router
+    model host
+    network-config {
+	hostname n6
+	!
+	interface eth0
+	 ip address 192.0.10.10/24
+	 ipv6 address 2001:db8:8::10/64
+	!
+    }
+    canvas c1
+    iconcoords {758.0 521.0}
+    labelcoords {724.0 549.0}
+    interface-peer {eth0 n5}
+}
+
+node n7 {
+    type router
+    model host
+    network-config {
+	hostname n7
+	!
+	interface eth0
+	 ip address 192.0.9.10/24
+	 ipv6 address 2001:db8:7::10/64
+	!
+    }
+    canvas c1
+    iconcoords {898.0 470.0}
+    labelcoords {898.0 502.0}
+    interface-peer {eth0 n5}
+}
+
+node n8 {
+    type router
+    model host
+    network-config {
+	hostname n8
+	!
+	interface eth0
+	 ip address 192.0.5.10/24
+	 ipv6 address 2001:db8:3::10/64
+	!
+    }
+    canvas c1
+    iconcoords {415.0 348.0}
+    labelcoords {415.0 380.0}
+    interface-peer {eth0 n4}
+}
+
+node n9 {
+    type router
+    model host
+    network-config {
+	hostname n9
+	!
+	interface eth0
+	 ip address 192.0.6.10/24
+	 ipv6 address 2001:db8:4::10/64
+	!
+    }
+    canvas c1
+    iconcoords {540.0 374.0}
+    labelcoords {540.0 406.0}
+    interface-peer {eth0 n4}
+}
+
+node n10 {
+    type router
+    model host
+    network-config {
+	hostname n10
+	!
+	interface eth0
+	 ip address 192.0.7.10/24
+	 ipv6 address 2001:db8:5::10/64
+	!
+    }
+    canvas c1
+    iconcoords {575.0 211.0}
+    labelcoords {575.0 243.0}
+    interface-peer {eth0 n4}
+}
+
+link l1 {
+    nodes {n1 n3}
+    bandwidth 0
+}
+
+link l2 {
+    nodes {n2 n3}
+    bandwidth 0
+}
+
+link l3 {
+    nodes {n3 n4}
+    bandwidth 0
+}
+
+link l4 {
+    nodes {n4 n8}
+    bandwidth 0
+}
+
+link l5 {
+    nodes {n4 n9}
+    bandwidth 0
+}
+
+link l6 {
+    nodes {n4 n10}
+    bandwidth 0
+}
+
+link l7 {
+    nodes {n4 n5}
+    bandwidth 0
+}
+
+link l8 {
+    nodes {n5 n7}
+    bandwidth 0
+}
+
+link l9 {
+    nodes {n5 n6}
+    bandwidth 0
+}
+
+annotation a1 {
+    iconcoords {99 143 288 423}
+    type rectangle
+    label {LAN}
+    labelcolor black
+    fontfamily {Arial}
+    fontsize {12}
+    color #C0C0FF
+    width 0
+    border black
+    rad 40
+    effects {bold}
+    canvas c1
+}
+
+annotation a3 {
+    iconcoords {703 315 928 565}
+    type rectangle
+    label {DMA}
+    labelcolor black
+    fontfamily {Arial}
+    fontsize {12}
+    color #C0C0FF
+    width 0
+    border black
+    rad 36
+    effects {bold}
+    canvas c1
+}
+
+annotation a2 {
+    iconcoords {379 119 636 474}
+    type rectangle
+    label {INTERNET}
+    labelcolor black
+    fontfamily {Arial}
+    fontsize 12
+    color #C0C0FF
+    width 0
+    border black
+    rad 40
+    effects {bold}
+    canvas c1
+}
+
+canvas c1 {
+    name {Canvas1}
+}
+
+option global {
+    interface_names no
+    ip_addresses yes
+    ipv6_addresses no
+    node_labels yes
+    link_labels yes
+    show_api no
+    background_images no
+    annotations yes
+    grid yes
+    traffic_start 0
+}
+
+option session {
+}
+
